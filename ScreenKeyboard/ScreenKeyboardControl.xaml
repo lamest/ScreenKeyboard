@@ -1,0 +1,485 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ScreenKeyboard"
+    xmlns:converters="clr-namespace:ScreenKeyboard.Converters"
+    Name="ScreenKeyboard"
+    x:Class="ScreenKeyboard.ScreenKeyboardControl"
+    mc:Ignorable="d"
+    d:DesignHeight="300" d:DesignWidth="1024"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}" >
+    <!--DataContext="{Binding RelativeSource={RelativeSource Self}}"-->
+    <UserControl.Resources>
+        <converters:ButtonWidthConverter x:Key="ButtonWidthConverter" />
+        <converters:ButtonHeightConverter x:Key="ButtonHeightConverter" />
+        <converters:NumberButtonWidthConverter x:Key="NumberButtonWidthConverter" />
+        <converters:NumberButtonHeightConverter x:Key="NumberButtonHeightConverter" />
+        <converters:BoolToVizibilityConverter x:Key="BoolToVizibilityConverter" />
+        <converters:ButtonLayoutConverter x:Key="ButtonLayoutConverter" />
+        <ControlTemplate TargetType="{x:Type Button}" x:Key="EnterControlTemplate">
+            <Border Background="{TemplateBinding Background}" CornerRadius="10" RenderTransformOrigin=".5,.5">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderThickness" Value="5" />
+                                <Setter Property="BorderBrush" Value="#b2b4ba" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Image Source="Images/Enter.png" HorizontalAlignment="Center"
+                       VerticalAlignment="Center" Width="50" Height="50" />
+            </Border>
+        </ControlTemplate>
+        <ControlTemplate TargetType="{x:Type RepeatButton}" x:Key="BackspaceTemplate">
+            <Border Background="{TemplateBinding Background}" CornerRadius="10" RenderTransformOrigin=".5,.5">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderThickness" Value="5" />
+                                <Setter Property="BorderBrush" Value="#b2b4ba" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Image Source="Images/Backspace.png" HorizontalAlignment="Center"
+                       VerticalAlignment="Center" Width="40" Height="40" />
+            </Border>
+        </ControlTemplate>
+        <ControlTemplate TargetType="{x:Type Button}" x:Key="SwitchVisibilityTemplate">
+            <Border Background="{TemplateBinding Background}" CornerRadius="10" RenderTransformOrigin=".5,.5">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderThickness" Value="5" />
+                                <Setter Property="BorderBrush" Value="#b2b4ba" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Image Source="Images/KeyboardIcon.png" HorizontalAlignment="Center"
+                       VerticalAlignment="Center" Width="40" Height="40" />
+            </Border>
+        </ControlTemplate>
+        <ControlTemplate TargetType="{x:Type Button}" x:Key="CapsTemplate">
+            <Border Background="{TemplateBinding Background}" CornerRadius="10" RenderTransformOrigin=".5,.5">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderThickness" Value="5" />
+                                <Setter Property="BorderBrush" Value="#b2b4ba" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Image x:Name="CapsImage" Width="40" Height="40" HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+                <DataTrigger Binding="{Binding CapslockState}" Value="{x:Static local:CapsState.Off}">
+                    <Setter TargetName="CapsImage" Property="Source"
+                            Value="Images/CapsOff.png" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CapslockState}" Value="{x:Static local:CapsState.SingleTime}">
+                    <Setter TargetName="CapsImage" Property="Source"
+                            Value="Images/CapsSingle.png" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CapslockState}" Value="{x:Static local:CapsState.On}">
+                    <Setter TargetName="CapsImage" Property="Source"
+                            Value="Images/CapsOn.png" />
+                </DataTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate TargetType="{x:Type Button}" x:Key="ButtonControlTemplate">
+            <Border Background="{TemplateBinding Background}" CornerRadius="10" RenderTransformOrigin=".5,.5">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderThickness" Value="5" />
+                                <Setter Property="BorderBrush" Value="#b2b4ba" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock TextAlignment="Center"
+                               FontSize="30"
+                               Grid.Row="1"
+                               Grid.Column="1"
+                               Foreground="{TemplateBinding Foreground}">
+                        <ContentPresenter />
+                    </TextBlock>
+                </Grid>
+            </Border>
+        </ControlTemplate>
+        <Style TargetType="{x:Type Control}" x:Key="ButtonStyle">
+            <Setter Property="Height">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource ButtonHeightConverter}">
+                        <Binding ElementName="RowsItemsControl" Path="ItemsSource" />
+                        <Binding ElementName="RowsItemsControl" Path="ActualHeight" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+        <Style TargetType="{x:Type Button}" x:Key="NumberButtonStyle">
+            <Setter Property="Height">
+                <Setter.Value>
+                    60
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+        <DataTemplate x:Key="DynamicLanguagesControlTemplate">
+            <Grid Background="{x:Null}" Width="{Binding ElementName=RowsItemsControl, Path=ActualWidth}"
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ItemsControl x:Name="RowItemsControl"
+                              ItemsSource="{Binding }"
+                              d:DesignWidth="243.333" d:DesignHeight="159.333"
+                              BorderThickness="0"
+                              BorderBrush="{x:Null}"
+                              Grid.Row="1"
+                              Grid.Column="1"
+                              ScrollViewer.CanContentScroll="False"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel IsItemsHost="True" Orientation="Horizontal"
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch" BorderBrush="{x:Null}"
+                                x:Name="TheButton"
+                                Command="{Binding InputCommand}"
+                                CommandParameter="{Binding }"
+                                Style="{StaticResource ButtonStyle}"
+                                Template="{StaticResource ButtonControlTemplate}"
+                                Background="Transparent"
+                                Foreground="Black">
+                                <Button.Width>
+                                    <MultiBinding Converter="{StaticResource ButtonWidthConverter}">
+                                        <Binding ElementName="RowsItemsControl" Path="ItemsSource" />
+                                        <Binding ElementName="RowsItemsControl" Path="ActualWidth" />
+                                    </MultiBinding>
+                                </Button.Width>
+                                <Button.Content>
+                                    <MultiBinding Converter="{StaticResource ButtonLayoutConverter}">
+                                        <Binding Path="View" />
+                                        <Binding Path="CapitalView" />
+                                        <Binding Path="ViewModel.CapslockState" ElementName="Keyboard" />
+                                    </MultiBinding>
+                                </Button.Content>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid Focusable="True" DataContext="{Binding ViewModel}" x:Name="ParentGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ItemsControl x:Name="NumbersItemsControl"
+                          ItemsSource="{Binding NumbersBlock.Rows[0]}"
+                          BorderThickness="0"
+                          BorderBrush="{x:Null}"
+                          ScrollViewer.CanContentScroll="False"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel IsItemsHost="True" Orientation="Horizontal"
+                                    ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch" BorderBrush="{x:Null}"
+                            x:Name="TheButton"
+                            Command="{Binding InputCommand}"
+                            CommandParameter="{Binding }"
+                            Style="{StaticResource NumberButtonStyle}"
+                            Template="{StaticResource ButtonControlTemplate}"
+                            Background="Transparent"
+                            Foreground="Black"
+                            Height="55">
+                            <Button.Width>
+                                <MultiBinding Converter="{StaticResource NumberButtonWidthConverter}">
+                                    <Binding ElementName="NumbersItemsControl" Path="ItemsSource" />
+                                    <Binding ElementName="NumbersItemsControl" Path="ActualWidth" />
+                                </MultiBinding>
+                            </Button.Width>
+                            <Button.Content>
+                                <MultiBinding Converter="{StaticResource ButtonLayoutConverter}">
+                                    <Binding Path="View" />
+                                    <Binding Path="CapitalView" />
+                                    <Binding Path="ViewModel.CapslockState" ElementName="Keyboard" />
+                                </MultiBinding>
+                            </Button.Content>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="HideKeyboard"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch" BorderBrush="{x:Null}"
+                    Command="{Binding HideKeyboardCommand}"
+                    Style="{StaticResource ButtonStyle}"
+                    Template="{StaticResource SwitchVisibilityTemplate}"
+                    Grid.Row="0" Grid.Column="1"
+                    Background="#FF129FDD"
+                    Foreground="Black"
+                    Visibility="{Binding HideButtonVisible, Converter={StaticResource BoolToVizibilityConverter}}"
+                    Width="50"
+                    Height="50"
+                    Focusable="True" />
+        </Grid>
+        <ItemsControl ItemsSource="{Binding Rows}"
+                      BorderThickness="0"
+                      BorderBrush="{x:Null}"
+                      x:Name="RowsItemsControl"
+                      ScrollViewer.CanContentScroll="False"
+                      ItemTemplate="{StaticResource DynamicLanguagesControlTemplate}"
+                      DataContext="{Binding CurrentLayout}"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      Background="{x:Null}"
+                      Grid.Row="1" Grid.Column="0"
+                      Grid.ColumnSpan="3" Grid.RowSpan="2">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        <Button Content="Capslock"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch" BorderBrush="{x:Null}"
+                Command="{Binding RegisterKeyInputCommand}"
+                CommandParameter="capslock"
+                DockPanel.Dock="Left"
+                Style="{StaticResource ButtonStyle}"
+                Template="{StaticResource CapsTemplate}"
+                Grid.Row="2" Grid.Column="0"
+                Background="Transparent"
+                Foreground="White"
+                Visibility="{Binding IsLangMode, Converter={StaticResource BoolToVizibilityConverter}}">
+            <Button.Width>
+                <MultiBinding Converter="{StaticResource ButtonWidthConverter}">
+                    <Binding ElementName="RowsItemsControl" Path="ItemsSource" />
+                    <Binding ElementName="RowsItemsControl" Path="ActualWidth" />
+                </MultiBinding>
+            </Button.Width>
+        </Button>
+        <RepeatButton Content="BS"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch" BorderBrush="{x:Null}"
+                      Command="{Binding RegisterKeyInputCommand}"
+                      CommandParameter="BS"
+                      DockPanel.Dock="Right"
+                      Style="{StaticResource ButtonStyle}"
+                      Template="{StaticResource BackspaceTemplate}"
+                      Grid.Row="2" Grid.Column="2"
+                      Background="Transparent"
+                      Foreground="White">
+            <RepeatButton.Width>
+                <MultiBinding Converter="{StaticResource ButtonWidthConverter}">
+                    <Binding ElementName="RowsItemsControl" Path="ItemsSource" />
+                    <Binding ElementName="RowsItemsControl" Path="ActualWidth" />
+                </MultiBinding>
+            </RepeatButton.Width>
+        </RepeatButton>
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Content="smiles"
+                BorderBrush="{x:Null}"
+                Command="{Binding RegisterKeyInputCommand}"
+                CommandParameter="smiles"
+                Style="{StaticResource ButtonStyle}"
+                Template="{StaticResource ButtonControlTemplate}"
+                Visibility="Collapsed"
+                Background="Transparent"
+                Foreground="Black"
+                Height="50" />
+            <Button
+                Grid.Column="0"
+                Content="{Binding SymbolBlock.Name}"
+                BorderBrush="{x:Null}"
+                Command="{Binding RegisterKeyInputCommand}"
+                CommandParameter="symbols"
+                Style="{StaticResource ButtonStyle}"
+                Template="{StaticResource ButtonControlTemplate}"
+                Width="80"
+                Background="Transparent"
+                Foreground="Black"
+                Height="50" />
+            <Button
+                Grid.Column="1"
+                Content="{Binding CurrentLayout.Name}"
+                BorderBrush="{x:Null}"
+                Command="{Binding RegisterKeyInputCommand}"
+                CommandParameter="lang"
+                Style="{StaticResource ButtonStyle}"
+                Template="{StaticResource ButtonControlTemplate}"
+                Width="70"
+                Background="Transparent"
+                Foreground="Black"
+                Visibility="{Binding IsLangMode, Converter={StaticResource BoolToVizibilityConverter}}"
+                Height="50" />
+            <Button
+                Grid.Column="2"
+                Content=","
+                BorderBrush="{x:Null}"
+                Command="{Binding RegisterKeyInputCommand}"
+                CommandParameter=","
+                Style="{StaticResource ButtonStyle}"
+                Template="{StaticResource ButtonControlTemplate}"
+                Width="70"
+                Background="Transparent"
+                Foreground="Black"
+                Height="50" />
+            <Button
+                Grid.Column="3"
+                Content=" "
+                BorderBrush="{x:Null}"
+                Command="{Binding RegisterKeyInputCommand}"
+                CommandParameter="space"
+                Style="{StaticResource ButtonStyle}"
+                Template="{StaticResource ButtonControlTemplate}"
+                Background="#d1d6d9"
+                Foreground="White"
+                Height="50" />
+            <Button
+                Grid.Column="4"
+                Content="."
+                BorderBrush="{x:Null}"
+                Command="{Binding RegisterKeyInputCommand}"
+                CommandParameter="."
+                Style="{StaticResource ButtonStyle}"
+                Template="{StaticResource ButtonControlTemplate}"
+                Width="70"
+                Background="Transparent"
+                Foreground="Black"
+                Height="50" />
+            <Button
+                Grid.Column="5"
+                Content="Ввод"
+                BorderBrush="{x:Null}"
+                Command="{Binding RegisterKeyInputCommand}"
+                CommandParameter="enter"
+                Style="{StaticResource ButtonStyle}"
+                Template="{StaticResource EnterControlTemplate}"
+                Width="160"
+                Background="#FF129FDD"
+                Height="50" />
+        </Grid>
+    </Grid>
+
+    <!--<Grid>
+          <ItemsControl ItemsSource="{Binding ViewModel.KeyboardTabs}">
+              <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                      <StackPanel>
+                          <Button Content="{Binding }"></Button>
+                      </StackPanel>
+                  </DataTemplate>
+              </ItemsControl.ItemTemplate>
+          </ItemsControl>  
+    </Grid>-->
+</UserControl>
