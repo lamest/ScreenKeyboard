@@ -237,7 +237,7 @@
                                     <MultiBinding Converter="{StaticResource ButtonLayoutConverter}">
                                         <Binding Path="View" />
                                         <Binding Path="CapitalView" />
-                                        <Binding Path="ViewModel.CapslockState" ElementName="Keyboard" />
+                                        <Binding Path="ViewModel.CapslockState" ElementName="ScreenKeyboard" />
                                     </MultiBinding>
                                 </Button.Content>
                             </Button>
@@ -300,7 +300,7 @@
                                 <MultiBinding Converter="{StaticResource ButtonLayoutConverter}">
                                     <Binding Path="View" />
                                     <Binding Path="CapitalView" />
-                                    <Binding Path="ViewModel.CapslockState" ElementName="Keyboard" />
+                                    <Binding Path="ViewModel.CapslockState" ElementName="ScreenKeyboard" />
                                 </MultiBinding>
                             </Button.Content>
                         </Button>

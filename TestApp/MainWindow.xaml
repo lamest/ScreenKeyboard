@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:TestApp"
         xmlns:screenKeyboard="clr-namespace:ScreenKeyboard;assembly=ScreenKeyboard"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="1080">
+        Title="MainWindow" Height="500" Width="1080" 
+        x:Name="Root">
     <StackPanel>
         <TextBox Height="50"></TextBox>
-        <screenKeyboard:ScreenKeyboardControl Height="500" Width="1080" ViewModel="{Binding KeyboardViewModel}"></screenKeyboard:ScreenKeyboardControl>
+        <screenKeyboard:ScreenKeyboardControl Height="500" Width="1080" ViewModel="{Binding KeyboardViewModel, ElementName=Root}"></screenKeyboard:ScreenKeyboardControl>
     </StackPanel>
 </Window>
